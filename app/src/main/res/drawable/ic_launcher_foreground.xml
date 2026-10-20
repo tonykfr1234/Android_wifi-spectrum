@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Artwork stays inside the 66dp adaptive-icon safe circle centred at 54,54. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <path android:strokeColor="#3A4757" android:strokeWidth="1.5" android:strokeLineCap="round" android:pathData="M28,72 L80,72" />
+    <path android:strokeColor="#FF4FA3" android:strokeWidth="3" android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:fillColor="#33FF4FA3" android:pathData="M50,72 C55,36 75,36 80,72 Z" />
+    <path android:strokeColor="#3CE38A" android:strokeWidth="3" android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:fillColor="#333CE38A" android:pathData="M28,72 C33,26 53,26 58,72 Z" />
+    <path android:strokeColor="#2BC4FF" android:strokeWidth="3" android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:fillColor="#332BC4FF" android:pathData="M38,72 C43,48 57,48 62,72 Z" />
+</vector>

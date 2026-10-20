@@ -1,0 +1,57 @@
+name: Security Scan
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  secret-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Scan repository for secrets, signing keys and private files
+        run: python scripts/security_scan.py .
+      - name: Compile Python scripts
+        run: python -m py_compile scripts/*.py
+      - name: Verify SHA256SUMS.txt
+        run: python scripts/update_checksums.py --check
+
+  android-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Run unit, UI, multi-API, stress and fuzz tests
+        run: ./gradlew testDebugUnitTest --stacktrace
+      - name: Android Lint
+        run: ./gradlew lintDebug
+      - name: Build installable debug APK and release bundle
+        run: ./gradlew assembleDebug bundleRelease
+      - name: Summarise test results
+        if: always()
+        run: python3 scripts/test_summary.py | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: wifi-spectrum-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+      - name: Upload test reports and rendered screens
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            app/build/reports/tests/
+            app/build/reports/lint-results-debug.html
+            app/build/screenshots/
